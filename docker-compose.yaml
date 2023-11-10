@@ -1,0 +1,45 @@
+version: '3.8'
+# docker-compose up && docker-compose rm -fsv # run and remove on exit
+
+services:
+  rabbitmq:
+    image: 'rabbitmq:3-management'
+    container_name: "rabbitmq"
+    hostname: "rabbitmq"
+    ports:
+      - 5672:5672
+      - 8080:15672
+    expose:
+      - 5672
+      - 8080
+    volumes:
+      - ./configs/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    environment:
+     - RABBITMQ_ERLANG_COOKIE=TSRFKGXDNWTIZMKRSLDY
+     - RABBITMQ_CONFIG_FILE=/etc/rabbitmq/rabbitmq.conf
+
+  rabbitmq-2:
+    image: 'rabbitmq:3-management'
+    container_name: "rabbitmq-2"
+    hostname: "rabbitmq-2"
+    ports:
+      - 5671:5672
+      - 8081:15672
+    volumes:
+      - ./configs/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=TSRFKGXDNWTIZMKRSLDY
+      - RABBITMQ_CONFIG_FILE=/etc/rabbitmq/rabbitmq.conf
+
+  rabbitmq-3:
+    image: 'rabbitmq:3-management'
+    container_name: "rabbitmq-3"
+    hostname: "rabbitmq-3"
+    ports:
+      - 5673:5672
+      - 8082:15672
+    volumes:
+      - ./configs/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=TSRFKGXDNWTIZMKRSLDY
+      - RABBITMQ_CONFIG_FILE=/etc/rabbitmq/rabbitmq.conf
