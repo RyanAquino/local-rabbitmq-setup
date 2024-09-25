@@ -10,16 +10,25 @@ def publish_message(message, queue_name="test-queue-q"):
     # Create a channel
     channel = connection.channel()
 
+    # Exchange params
+    exchange_name = "test-exchange-d"
+    exchange_type = "direct"
+
     # Declare a queue (create it if it doesn't exist)
     channel.queue_declare(
         queue=queue_name, durable=True, arguments={"x-queue-type": "quorum"}
     )
+    channel.exchange_declare(exchange=exchange_name, exchange_type=exchange_type, durable=True)
+
+    # Create binding
+    routing_key = "test"
+    channel.queue_bind(exchange=exchange_name, queue=queue_name, routing_key=routing_key)
 
     # Publish the message to the queue
     for i in range(100000):
         channel.basic_publish(
-            exchange="test-exchange-d",
-            routing_key="test",
+            exchange=exchange_name,
+            routing_key=routing_key,
             body=f"{message} {i}",
             properties=pika.BasicProperties(
                 delivery_mode=2,  # Make the message persistent
